@@ -28,7 +28,7 @@ int main()
     {
         page_ptr[i].page = (uint8_t *)malloc(sizeof(uint8_t)*PAGE_SIZE);
         page_ptr[i].size = sizeof(uint8_t) * PAGE_SIZE;
-        printf("%d %" PRIx64 "\n", i, page_ptr[i]);
+        printf("%d %" PRIx64 "\n", i, page_ptr);
     }
 
     while(1)
@@ -44,29 +44,33 @@ int main()
         //current_size = realloc_page_ptr(page_ptr, current_size, input);
 
         int new_size = input;
-        if(new_size < current_size) {
-        int i;
-        for(i = new_size ; i < current_size ; i++) {
+        if(new_size < current_size)
+        {
+            int i;
+            for(i = new_size ; i < current_size ; i++)
+            {
                 printf("%" PRIx64 " %d\n", page_ptr[i], page_ptr[i].size);
-            free(page_ptr[i].page);
-            page_ptr[i].size = 0;
+                free(page_ptr[i].page);
+                page_ptr[i].size = 0;
+            }
         }
-    }
-    printf("page_ptr address before realloc :%" PRIx64 "\n", page_ptr[0]);
-    if((page_ptr = realloc(page_ptr, page_ptr_size(new_size)*PAGE_SIZE)) == NULL)
-    {
-        fprintf(stderr, "Error, (re)allocation memory!!\n");
-        exit(EXIT_FAILURE);
-    }
+        printf("page_ptr address before realloc :%" PRIx64 "\n", page_ptr[0]);
+        if((page_ptr = realloc(page_ptr, page_ptr_size(new_size)*PAGE_SIZE)) == NULL)
+        {
+            fprintf(stderr, "Error, (re)allocation memory!!\n");
+            exit(EXIT_FAILURE);
+        }
 
-    if(current_size < new_size) {
-        int i;
-        for( i = current_size ; i < new_size ; i++) {
-            page_ptr[i].page = (uint8_t *)malloc(sizeof(uint8_t)*PAGE_SIZE);
-            page_ptr[i].size = sizeof(uint8_t) * PAGE_SIZE;
+        if(current_size < new_size)
+        {
+            int i;
+            for( i = current_size ; i < new_size ; i++)
+            {
+                page_ptr[i].page = (uint8_t *)malloc(sizeof(uint8_t)*PAGE_SIZE);
+                page_ptr[i].size = sizeof(uint8_t) * PAGE_SIZE;
+            }
         }
-    }
-    printf("page_ptr address after realloc :%" PRIx64 "\n", page_ptr[0]);
+        printf("page_ptr address after realloc :%" PRIx64 "\n", page_ptr[0]);
 
         current_size = new_size;
 
@@ -88,10 +92,12 @@ int realloc_page_ptr(Page *page_ptr, uint64_t current_size, uint64_t new_size)
 {
     printf("page_ptr address before realloc :%" PRIx64 "\n", page_ptr[0]);
     if(current_size == new_size) return new_size;
-    else if(new_size < current_size) {
+    else if(new_size < current_size)
+    {
         int i;
-        for(i = new_size ; i < current_size ; i++) {
-                printf("%" PRIx64 " %d\n", page_ptr[i], page_ptr[i].size);
+        for(i = new_size ; i < current_size ; i++)
+        {
+            printf("%" PRIx64 " %d\n", page_ptr[i], page_ptr[i].size);
             free(page_ptr[i].page);
             page_ptr[i].size = 0;
         }
@@ -103,22 +109,26 @@ int realloc_page_ptr(Page *page_ptr, uint64_t current_size, uint64_t new_size)
         exit(EXIT_FAILURE);
     }
 
-    if(current_size < new_size) {
+    if(current_size < new_size)
+    {
         int i;
-        for( i = current_size ; i < new_size ; i++) {
+        for( i = current_size ; i < new_size ; i++)
+        {
             page_ptr[i].page = (uint8_t *)malloc(sizeof(uint8_t)*PAGE_SIZE);
             page_ptr[i].size = sizeof(uint8_t) * PAGE_SIZE;
         }
     }
     printf("page_ptr address after realloc :%" PRIx64 "\n", page_ptr[0]);
 
-        return new_size;
+    return new_size;
 }
 
-void free_all(Page * page_ptr, uint64_t size) {
+void free_all(Page * page_ptr, uint64_t size)
+{
     //free(page_ptr);
     int i;
-    for(i = 0 ; i < size ; i++) {
+    for(i = 0 ; i < size ; i++)
+    {
         free(page_ptr[i].page);
         //page_ptr[i].size = 0;
         printf("%d %" PRIx64 "\n", i, page_ptr[i]);
