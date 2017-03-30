@@ -4,31 +4,35 @@
 #include <sys/types.h>
 //#include "apue.h"
 
-#define PRINT printf("PID: %d  PPID: %d\n", (int)getpid(), (int)getppid());
 
 void pr_exit(int status);
 
 static int a;
 
 int main(int argc, char* argv[]) {
-    int N = atoi(argv[1]);
-    pid_t child_pid;
-    int count = 0;
-LOOP_FORK :
-    if(child_pid != 0) {
-        if(count == 5) return 0;
-        count++;
-        printf("parent L ");
-        PRINT;
-        wait(NULL);
-    } else {
-        printf("child : ");
-        PRINT;
-        child_pid = fork();
-        goto LOOP_FORK;
+    int N;
+    if(argc != 2 || (N = atoi(argv[1])) < 1){
+        fprintf(stderr, "Invalid Argument\n");
+        exit(EXIT_FAILURE);
     }
-
-    return 0;
+    pid_t child_pid = 0;
+    int count = 0, i;
+    int child_status;
+    
+    for (i = 1; i <= N; i++) {
+        if(child_pid != 0) {
+            waitpid(child_pid, &child_status, 0);
+            printf("Process: %d ", i);
+            pr_exit(child_status);
+            break;
+        } else {
+            printf("Process: %d ", i);
+            printf("PID: %d  PPID: %d\n", (int)getpid(), (int)getppid());
+            if(i < N)
+                child_pid = fork();
+        }
+    }
+    exit(EXIT_SUCCESS);
 }
 
 void pr_exit(int status) {
