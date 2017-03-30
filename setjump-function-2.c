@@ -5,7 +5,7 @@ static jmp_buf jumpbuffer;
 
 void f3() {
     printf("call function f3\n");
-    longjmp(jumpbuffer, 0);
+    longjmp(jumpbuffer, 1);
     printf("f3 after call longjump\n");
 }
 void f2() {
@@ -21,10 +21,13 @@ void f1() {
 
 
 int main() {
+        if(setjmp(jumpbuffer)) {
+            return 0;
+        }
         printf("main before call f1\n");
         f1();
-        printf("Affter f1()\n");
-        setjmp(jumpbuffer);
+        printf("After f1()\n");
+        //setjmp(jumpbuffer);
     
     return 0;
 }
